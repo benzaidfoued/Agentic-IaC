@@ -1,0 +1,42 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: forgeiac-azure-resource-group
+spec:
+  compositeTypeRef:
+    apiVersion: platform.forgeiac.dev/v1alpha1
+    kind: XResourceGroup
+  mode: Pipeline
+  pipeline:
+    - step: resource-group
+      functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+        resources:
+          - name: resource-group
+            base:
+              apiVersion: azure.m.upbound.io/v1beta1
+              kind: ResourceGroup
+              spec:
+                deletionPolicy: Orphan
+                forProvider:
+                  tags:
+                    managed-by: forgeiac
+                providerConfigRef:
+                  kind: ProviderConfig
+                  name: default
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.location
+                toFieldPath: spec.forProvider.location
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.environment
+                toFieldPath: spec.forProvider.tags.environment
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.parameters.providerConfigName
+                toFieldPath: spec.providerConfigRef.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: metadata.name
+                toFieldPath: metadata.annotations[crossplane.io/external-name]

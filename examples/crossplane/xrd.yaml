@@ -1,0 +1,36 @@
+apiVersion: apiextensions.crossplane.io/v2
+kind: CompositeResourceDefinition
+metadata:
+  name: xresourcegroups.platform.forgeiac.dev
+spec:
+  scope: Namespaced
+  group: platform.forgeiac.dev
+  names:
+    kind: XResourceGroup
+    plural: xresourcegroups
+  enforcedCompositionRef:
+    name: forgeiac-azure-resource-group
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required: [parameters]
+              properties:
+                parameters:
+                  type: object
+                  required: [location, environment, providerConfigName]
+                  properties:
+                    location:
+                      type: string
+                      enum: [canadacentral, canadaeast, eastus, westus2, westeurope]
+                    environment:
+                      type: string
+                      enum: [dev, staging, prod]
+                    providerConfigName:
+                      type: string

@@ -1,0 +1,14 @@
+# Requires an existing namespace and an externally managed Azure credentials Secret.
+# Keep raw credentials out of Git. Adapt this to workload identity in production.
+apiVersion: azure.m.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: default
+  namespace: platform
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: platform
+      name: azure-credentials
+      key: credentials

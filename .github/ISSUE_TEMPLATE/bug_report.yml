@@ -1,0 +1,23 @@
+name: Bug report
+description: Report a reproducible problem without sharing credentials.
+title: 'bug: '
+body:
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions and environment
+      description: ForgeIaC, Python, OS, Terraform or Crossplane/provider versions.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Minimal steps, expected behavior, actual behavior. Redact all secrets.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted evidence
+      description: Do not upload state, saved plans, credentials or unreviewed logs.

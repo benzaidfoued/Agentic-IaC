@@ -1,0 +1,14 @@
+name: Feature or blueprint request
+description: Suggest a capability with a concrete use case.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem and desired outcome
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Proposed scope and validation
+      description: Engine, cloud, permissions, cost, safety requirements and test approach.

@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "forgeiac-agent"
+version = "0.1.0"
+description = "From infrastructure intent to reviewed, reproducible Terraform and Crossplane changes."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [{name = "ForgeIaC contributors"}]
+keywords = ["crossplane", "terraform", "gitops", "ai", "platform-engineering"]
+classifiers = ["Development Status :: 3 - Alpha", "Programming Language :: Python :: 3", "Topic :: System :: Systems Administration"]
+dependencies = ["jsonschema>=4.23,<5", "PyYAML>=6.0.2,<7"]
+
+[project.optional-dependencies]
+ai = ["langchain>=1.0,<2", "langchain-openai>=1.0,<2", "langchain-anthropic>=1.0,<2", "langchain-ollama>=1.0,<2"]
+mcp = ["mcp>=1.12,<2"]
+dev = ["pip>=26.2.1,<27", "pytest>=9.0.3,<10", "pytest-cov>=6,<7", "ruff>=0.11,<1", "build>=1.2,<2", "pip-audit>=2.9,<3"]
+
+[project.scripts]
+forgeiac = "forgeiac.cli:main"
+forgeiac-mcp = "forgeiac.mcp_server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/forgeiac"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"catalog" = "forgeiac/catalog"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: requires a real Terraform executable"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

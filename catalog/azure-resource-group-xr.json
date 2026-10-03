@@ -1,0 +1,71 @@
+{
+  "id": "azure-resource-group-xr",
+  "description": "Crossplane v2 namespaced XResourceGroup backed by the supplied Azure Composition. GitOps is the default delivery path.",
+  "engine": "crossplane",
+  "parameters": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]{2,39}$"
+      },
+      "namespace": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]{2,39}$"
+      },
+      "location": {
+        "type": "string",
+        "enum": [
+          "canadacentral",
+          "canadaeast",
+          "eastus",
+          "westus2",
+          "westeurope"
+        ]
+      },
+      "environment": {
+        "type": "string",
+        "enum": [
+          "dev",
+          "staging",
+          "prod"
+        ],
+        "default": "dev"
+      },
+      "provider_config": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]{2,39}$",
+        "default": "default"
+      }
+    },
+    "required": [
+      "name",
+      "namespace",
+      "location"
+    ]
+  },
+  "template": {
+    "apiVersion": "platform.forgeiac.dev/v1alpha1",
+    "kind": "XResourceGroup",
+    "metadata": {
+      "name": "{{name}}",
+      "namespace": "{{namespace}}",
+      "labels": {
+        "app.kubernetes.io/managed-by": "forgeiac"
+      }
+    },
+    "spec": {
+      "crossplane": {
+        "compositionRef": {
+          "name": "forgeiac-azure-resource-group"
+        }
+      },
+      "parameters": {
+        "location": "{{location}}",
+        "environment": "{{environment}}",
+        "providerConfigName": "{{provider_config}}"
+      }
+    }
+  }
+}

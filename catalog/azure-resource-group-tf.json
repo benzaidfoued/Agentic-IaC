@@ -1,0 +1,80 @@
+{
+  "id": "azure-resource-group-tf",
+  "description": "Azure resource group using Terraform, with required subscription ID and region, managed-by and environment tags.",
+  "engine": "terraform",
+  "parameters": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]{2,39}$"
+      },
+      "location": {
+        "type": "string",
+        "enum": [
+          "canadacentral",
+          "canadaeast",
+          "eastus",
+          "westus2",
+          "westeurope"
+        ]
+      },
+      "subscription_id": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      },
+      "environment": {
+        "type": "string",
+        "enum": [
+          "dev",
+          "staging",
+          "prod"
+        ],
+        "default": "dev"
+      }
+    },
+    "required": [
+      "name",
+      "location",
+      "subscription_id"
+    ]
+  },
+  "template": {
+    "terraform": {
+      "required_version": ">= 1.9.0, < 2.0.0",
+      "required_providers": {
+        "azurerm": {
+          "source": "hashicorp/azurerm",
+          "version": "~> 4.0"
+        }
+      }
+    },
+    "provider": {
+      "azurerm": {
+        "features": {},
+        "subscription_id": "{{subscription_id}}"
+      }
+    },
+    "resource": {
+      "azurerm_resource_group": {
+        "this": {
+          "name": "{{name}}",
+          "location": "{{location}}",
+          "tags": {
+            "managed-by": "forgeiac",
+            "environment": "{{environment}}"
+          },
+          "lifecycle": {
+            "prevent_destroy": true
+          }
+        }
+      }
+    },
+    "output": {
+      "resource_group_id": {
+        "value": "${azurerm_resource_group.this.id}"
+      }
+    }
+  }
+}
