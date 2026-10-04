@@ -16,7 +16,7 @@ dependencies = ["jsonschema>=4.23,<5", "PyYAML>=6.0.2,<7"]
 
 [project.optional-dependencies]
 ai = ["langchain>=1.0,<2", "langchain-openai>=1.0,<2", "langchain-anthropic>=1.0,<2", "langchain-ollama>=1.0,<2"]
-mcp = ["mcp>=1.12,<2"]
+mcp = ["mcp>=1.12,<3"]
 dev = ["pip>=26.2.1,<27", "pytest>=9.0.3,<10", "pytest-cov>=6,<7", "ruff>=0.11,<1", "build>=1.2,<2", "pip-audit>=2.9,<3"]
 
 [project.scripts]
